@@ -42,8 +42,40 @@ class FormSV extends Component {
         this.props.dispatch(action);
     }
 
+    handleOnSubmit = (event) => {
+        //ngan load lai trang
+        event.preventDefault();
+
+        let isValid = true;
+
+        //ktra con errorr tren form ko
+        for (const property in this.props.sinhVien.errors) {
+            if (this.props.sinhVien.errors[property] !== "") {
+                isValid = false;
+            }
+        }
+        for (const property in this.props.sinhVien.values) {
+            if (this.props.sinhVien.values[property] === "") {
+                isValid = false;
+            }
+        }
+        if (isValid) {
+            let action = {
+                type: "THEM_SV",
+                sv: this.props.sinhVien.values
+            }
+            this.props.dispatch(action);
+        }else {
+            alert("Form không được để trống!")
+        }
+
+        
+
+
+    }
+
     render() {
-        console.log("hihi", this.props.sinhVien)
+        // console.log("hihi", this.props.sinhVien)
         let { maSV, hoTen, sdt, email } = this.props.sinhVien.values;
         let { errors } = this.props.sinhVien;
         return (
@@ -51,14 +83,14 @@ class FormSV extends Component {
                 <div className="col-12">
                     <h2 className='bg-dark text-white'>Form Đăng Ký</h2>
 
-                    <form >
+                    <form  onSubmit={this.handleOnSubmit}>
                         <div className="row py-3">
                             <div className="col">
                                 <label htmlFor="maSV"> Mã SV</label>
                                 <input value={maSV} onChange={(event) => {
                                     this.handleOnChange(event)
                                 }} name='maSV' type="text" className="form-control" placeholder="Mã SV" />
-                                <p className='text-danger'>{errors.taiKhoan}</p>
+                                <p className='text-danger'>{errors.maSV}</p>
                             </div>
                             <div className="col">
                                 <label htmlFor="hoTen">Họ tên</label>
@@ -83,15 +115,7 @@ class FormSV extends Component {
                         </div>
 
                         <div className='py-3'>
-                            <button onClick={(event) => {
-                                event.preventDefault();
-                                let action = {
-                                    type: "CAP_NHAT",
-                                    ndCapNhat: this.props.nguoiDung.values
-                                }
-                                this.props.dispatch(action);
-
-                            }} className='btn btn-success mr-5'>Thêm Sinh Viên</button>
+                            <button className='btn btn-success mr-5'>Thêm Sinh Viên</button>
 
                         </div>
 

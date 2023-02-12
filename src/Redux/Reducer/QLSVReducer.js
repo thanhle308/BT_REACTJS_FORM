@@ -24,6 +24,7 @@ const initialState = {
 }
 
 export const QLSVReducer = (state = initialState, action) => {
+  // console.log("object", state.mangSinhVien);
   switch (action.type) {
     case "LUU_DATA_FORM":
       let newSV = {
@@ -31,7 +32,27 @@ export const QLSVReducer = (state = initialState, action) => {
         errors: action.newErrors
       }
       state.sinhVien = newSV;
-      return {...state}
+      return { ...state }
+
+    case "THEM_SV":
+      state.mangSinhVien = [...state.mangSinhVien, action.sv]
+      return { ...state }
+
+    case "XOA_ND":
+
+      state.mangSinhVien = state.mangSinhVien.filter((nd) => {
+        return nd.maSV !== action.tkXoa
+      });
+
+
+      return { ...state };
+
+    case "XEM_CHI_TIET":
+      state.sinhVien.values = action.svXem
+      //copy đối tượng nguoiDung để đổi địa chỉ ô nhớ
+      state.sinhVien = { ...state.sinhVien }
+
+      return { ...state };
 
     default:
       return state
